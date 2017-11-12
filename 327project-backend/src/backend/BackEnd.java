@@ -5,10 +5,8 @@
  */
 package backend;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
 
 /**
  *
@@ -16,6 +14,24 @@ import java.io.IOException;
  */
 public class BackEnd {
 
+    static ArrayList<Account> accounts = new ArrayList<>();
+    
+    public static void writeToFile(String newMasterAccountsFilePath, String validAccountsFilePath) throws IOException {
+        File newMasterAccountsFile = new File(newMasterAccountsFilePath);
+        File newValidAccFile = new File(validAccountsFilePath);
+        
+        FileWriter masterAccounts = new FileWriter(newMasterAccountsFile);
+        BufferedWriter writeMaster = new BufferedWriter(masterAccounts);
+        
+        FileWriter validAccounts = new FileWriter(newMasterAccountsFile);
+        BufferedWriter writeValid = new BufferedWriter(validAccounts);
+        
+        for (Account account : accounts) {
+            writeMaster.write(account.toString());
+            writeValid.write(account.getAccountNumber());
+        }
+    }
+    
     public static void run(String oldMasterAccountsFile, String mergedTSF,
             String newMasterAccountsFile, String validAccountsFile) throws FileNotFoundException, IOException {
 
