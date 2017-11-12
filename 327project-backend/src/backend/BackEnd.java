@@ -5,15 +5,46 @@
  */
 package backend;
 
+import java.io.*;
+import java.util.*;
+
 /**
  *
  * @author Michael Alarcon
  */
 public class BackEnd {
 
-    public static void run(String oldMasterAccountsFile, String mergedTSF, 
-            String newMasterAccountsFile, String validAccountsFile) {
+    static ArrayList<Account> accounts = new ArrayList<>();
+
+    public static void writeToFile(String newMasterAccountsFilePath, String validAccountsFilePath) throws IOException {
+        File newMasterAccountsFile = new File(newMasterAccountsFilePath);
+        File newValidAccFile = new File(validAccountsFilePath);
         
+        FileWriter masterAccounts = new FileWriter(newMasterAccountsFile);
+        BufferedWriter writeMaster = new BufferedWriter(masterAccounts);
+        
+        FileWriter validAccounts = new FileWriter(newMasterAccountsFile);
+        BufferedWriter writeValid = new BufferedWriter(validAccounts);
+        
+        for (Account account : accounts) {
+            
+            writeMaster.write(account.toString());
+            writeMaster.newLine();
+            
+            writeValid.write(account.getAccountNumber());
+            writeValid.newLine();
+        }
+    }
+
+    public static void run(String oldMasterAccountsFilePath, String mergedTSF, String newMasterAccountsFile, String validAccountsFile) {
+
+        try {
+            writeToFile(newMasterAccountsFile, validAccountsFile);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+//        readOldMasterAccounts.readFile();
     }
 
     /**
@@ -25,11 +56,8 @@ public class BackEnd {
         } else {
             System.out.println("ERROR");
         }
-        
+
         // READING FILES
-        
-        
-        
     }
 
 }
