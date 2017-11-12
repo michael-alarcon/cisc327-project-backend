@@ -13,13 +13,11 @@ import java.io.File;
  */
 public class Account {
     
-    private int number;
-    private long balance;
+    private String balance;
     private String name;
 
-    public Account(int number, long money, String name) {
-        this.number = number;
-        this.balance = money;
+    public Account(String balance, String name) {
+        this.balance = balance;
     }
     
     protected int getAccountNumber() {

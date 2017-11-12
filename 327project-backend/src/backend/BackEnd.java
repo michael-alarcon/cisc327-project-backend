@@ -14,24 +14,29 @@ import java.util.*;
  */
 public class BackEnd {
 
+    static HashMap<String, Account> accountsMap = new HashMap<>();
     static ArrayList<Account> accounts = new ArrayList<>();
-    
-    public static void writeToFile(String newMasterAccountsFilePath, String validAccountsFilePath) throws IOException {
-        File newMasterAccountsFile = new File(newMasterAccountsFilePath);
-        File newValidAccFile = new File(validAccountsFilePath);
-        
-        FileWriter masterAccounts = new FileWriter(newMasterAccountsFile);
-        BufferedWriter writeMaster = new BufferedWriter(masterAccounts);
-        
-        FileWriter validAccounts = new FileWriter(newMasterAccountsFile);
-        BufferedWriter writeValid = new BufferedWriter(validAccounts);
-        
-        for (Account account : accounts) {
-            writeMaster.write(account.toString());
-            writeValid.write(account.getAccountNumber());
+
+    public static void writeToFile(String newMasterAccountsFilePath, String validAccountsFilePath) {
+        try {
+            File newMasterAccountsFile = new File(newMasterAccountsFilePath);
+            File newValidAccFile = new File(validAccountsFilePath);
+
+            FileWriter masterAccounts = new FileWriter(newMasterAccountsFile);
+            BufferedWriter writeMaster = new BufferedWriter(masterAccounts);
+
+            FileWriter validAccounts = new FileWriter(newMasterAccountsFile);
+            BufferedWriter writeValid = new BufferedWriter(validAccounts);
+
+            for (Account account : accounts) {
+                writeMaster.write(account.toString());
+                writeValid.write(account.getAccountNumber());
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
-    
+
     public static void run(String oldMasterAccountsFile, String mergedTSF,
             String newMasterAccountsFile, String validAccountsFile) throws FileNotFoundException, IOException {
 
@@ -48,7 +53,8 @@ public class BackEnd {
                 name.append(element[i]);
             }
             String accNumber = element[0];
-            Account accNumber = new Account(element[1], element[2], name);
+            accountsMap.put(accNumber, new Account(element[1], name));
+            accounts.add(accountsMap.get(accNumber));
 
         }
 
