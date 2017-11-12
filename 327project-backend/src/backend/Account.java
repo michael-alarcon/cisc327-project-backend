@@ -5,16 +5,26 @@
  */
 package backend;
 
+import java.io.File;
+
 /**
  *
  * @author Neil
  */
 public class Account {
     
-    int number;
-    long balance;
-    String name;
+    private int number;
+    private long balance;
+    private String name;
+
+    public Account(int number, long money, String name) {
+        this.number = number;
+        this.balance = money;
+    }
     
+    protected int getAccountNumber() {
+        return number;
+    }
 }
 
 public void deposit(int amount){
