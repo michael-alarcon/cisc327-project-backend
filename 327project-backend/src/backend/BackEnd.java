@@ -5,15 +5,36 @@
  */
 package backend;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  *
  * @author Michael Alarcon
  */
 public class BackEnd {
 
-    public static void run(String oldMasterAccountsFile, String mergedTSF, 
-            String newMasterAccountsFile, String validAccountsFile) {
-        
+    public static void run(String oldMasterAccountsFile, String mergedTSF,
+            String newMasterAccountsFile, String validAccountsFile) throws FileNotFoundException, IOException {
+
+        // Reading Account Master File
+        FileReader fileReader = new FileReader(oldMasterAccountsFile);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+        String line;
+
+        while ((line = bufferedReader.readLine()) != null) {
+            String[] element = line.split(" ");
+            String accNumber = element[0];
+            Account accNumber = new Account;
+            accNumber.balance = element[1];
+            for (int i = 2; i < element.length; i++) {
+                accNumber.name = element[i];
+            }
+        }
+
     }
 
     /**
@@ -25,11 +46,7 @@ public class BackEnd {
         } else {
             System.out.println("ERROR");
         }
-        
-        // READING FILES
-        
-        
-        
+
     }
 
 }
