@@ -11,11 +11,20 @@ package backend;
  */
 public class BackEnd {
 
+    public static void run(String oldMasterAccountsFile, String mergedTSF, 
+            String newMasterAccountsFile, String validAccountsFile) {
+        
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        if (args.length == 4) {
+            run(args[0], args[1], args[2], args[3]);
+        } else {
+            System.out.println("ERROR");
+        }
     }
-    
+
 }
