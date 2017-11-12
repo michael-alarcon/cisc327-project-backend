@@ -40,15 +40,16 @@ public class BackEnd {
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
         String line;
+        String name = "";
 
         while ((line = bufferedReader.readLine()) != null) {
             String[] element = line.split(" ");
-            String accNumber = element[0];
-            Account accNumber = new Account;
-            accNumber.balance = element[1];
             for (int i = 2; i < element.length; i++) {
-                accNumber.name = element[i];
+                name.append(element[i]);
             }
+            String accNumber = element[0];
+            Account accNumber = new Account(element[1], element[2], name);
+
         }
 
     }
