@@ -15,9 +15,9 @@ import java.util.*;
 public class BackEnd {
 
     static ArrayList<Account> accounts = new ArrayList<>();
-    
+
     public static void readMergedTSF(String mergedTSF) {
-        
+
     }
 
     public static void writeToFile(String newMasterAccountsFilePath, String validAccountsFilePath) {
@@ -40,8 +40,7 @@ public class BackEnd {
         }
     }
 
-    public static void run(String oldMasterAccountsFile, String mergedTSF,
-            String newMasterAccountsFile, String validAccountsFile) throws FileNotFoundException, IOException {
+    public static void run(String oldMasterAccountsFile, String mergedTSF) throws FileNotFoundException, IOException {
 
         // Reading Account Master File
         FileReader fileReader = new FileReader(oldMasterAccountsFile);
