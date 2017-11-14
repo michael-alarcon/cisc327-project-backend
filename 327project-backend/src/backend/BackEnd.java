@@ -17,10 +17,10 @@ public class BackEnd {
     static ArrayList<Account> accounts = new ArrayList<>();
 
     public static void readMergedTSF(String mergedTSF) {
-
+        
     }
 
-    public static void writeToFile(String newMasterAccountsFilePath, String validAccountsFilePath) {
+    public static void writeValidFiles(String newMasterAccountsFilePath, String validAccountsFilePath) {
         try {
             File newMasterAccountsFile = new File(newMasterAccountsFilePath);
             File newValidAccFile = new File(validAccountsFilePath);
@@ -40,8 +40,7 @@ public class BackEnd {
         }
     }
 
-    public static void run(String oldMasterAccountsFile, String mergedTSF,
-            String newMasterAccountsFile, String validAccountsFile) {
+    public static void readOldMasterAccountsFile (String oldMasterAccountsFile) {
         
         try {
             // Reading Account Master File
@@ -71,11 +70,16 @@ public class BackEnd {
     }
 
     /**
-     * @param args the command line arguments
+     * @param args  1 - old master accounts file
+     *              2 - merged transaction summary file
+     *              3 - new master accounts file
+     *              4 - valid accounts file
      */
     public static void main(String[] args) {
         if (args.length == 4) {
-            run(args[0], args[1], args[2], args[3]);
+            readOldMasterAccountsFile(args[0]);
+            readMergedTSF(args[1]);
+            writeValidFiles(args[2], args[3]);
         } else {
             System.out.println("ERROR");
         }
