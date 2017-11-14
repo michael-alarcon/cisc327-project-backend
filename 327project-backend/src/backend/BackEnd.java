@@ -64,8 +64,8 @@ public class BackEnd {
         }
     }
 
-    public static void readOldMasterAccountsFile (String oldMasterAccountsFile) {
-        
+    public static void readOldMasterAccountsFile(String oldMasterAccountsFile) {
+
         try {
             // Reading Account Master File
             FileReader fileReader = new FileReader(oldMasterAccountsFile);
@@ -94,10 +94,7 @@ public class BackEnd {
     }
 
     /**
-     * @param args  1 - old master accounts file
-     *              2 - merged transaction summary file
-     *              3 - new master accounts file
-     *              4 - valid accounts file
+     * @param args 1 - old master accounts file 2 - merged transaction summary file 3 - new master accounts file 4 - valid accounts file
      */
     public static void main(String[] args) {
         if (args.length == 4) {
