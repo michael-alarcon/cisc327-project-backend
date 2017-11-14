@@ -15,9 +15,9 @@ import java.util.*;
 public class BackEnd {
 
     static ArrayList<Account> accounts = new ArrayList<>();
-    
+
     public static void readMergedTSF(String mergedTSF) {
-        
+
     }
 
     public static void writeToFile(String newMasterAccountsFilePath, String validAccountsFilePath) {
@@ -41,26 +41,32 @@ public class BackEnd {
     }
 
     public static void run(String oldMasterAccountsFile, String mergedTSF,
-            String newMasterAccountsFile, String validAccountsFile) throws FileNotFoundException, IOException {
+            String newMasterAccountsFile, String validAccountsFile) {
+        
+        try {
+            // Reading Account Master File
+            FileReader fileReader = new FileReader(oldMasterAccountsFile);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-        // Reading Account Master File
-        FileReader fileReader = new FileReader(oldMasterAccountsFile);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line, name, balance;
 
-        String line, name, balance;
-
-        while ((line = bufferedReader.readLine()) != null) {
-            String[] element = line.split(" ");
-            balance = element[1];
-            name = element[2];
-            if (element.length >= 3) {
-                for (int i = 3; i < element.length; i++) {
-                    name += element[i];
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] element = line.split(" ");
+                balance = element[1];
+                name = element[2];
+                if (element.length >= 3) {
+                    for (int i = 3; i < element.length; i++) {
+                        name += element[i];
+                    }
                 }
-            }
-            String accNumber = element[0];
-            accounts.add(new Account(accNumber, balance, name));
+                String accNumber = element[0];
+                accounts.add(new Account(accNumber, balance, name));
 
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 
