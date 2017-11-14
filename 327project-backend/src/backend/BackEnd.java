@@ -47,11 +47,11 @@ public class BackEnd {
         FileReader fileReader = new FileReader(oldMasterAccountsFile);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-        String line;
-        String name;
+        String line, name, balance;
 
         while ((line = bufferedReader.readLine()) != null) {
             String[] element = line.split(" ");
+            balance = element[1];
             name = element[2];
             if (element.length >= 3) {
                 for (int i = 3; i < element.length; i++) {
@@ -59,8 +59,7 @@ public class BackEnd {
                 }
             }
             String accNumber = element[0];
-            accountsMap.put(accNumber, new Account(element[1], name));
-            accounts.add(accountsMap.get(accNumber));
+            accounts.add(new Account(accNumber, balance, name));
 
         }
     }

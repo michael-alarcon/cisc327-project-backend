@@ -13,15 +13,33 @@ import java.io.File;
  */
 public class Account {
     
+    private int accountNumber;
     private long balance;
     private String name;
 
-    public Account(long balance, String name) {
-        this.balance = balance;
+    public Account(String accountNumber, String balance, String name) {
+        //convert parameters to correct type
+        //this.accountNumber = accountNumber;
+        //this.balance = balance;
+        this.name = name;
+        
+    }
+    
+    protected int getAccountNumber() {
+        return this.accountNumber;
+    }
+    
+    protected String getName() {
+        return this.name;
     }
     
     protected long getBalance() {
         return this.balance;
+    }
+    
+    @Override
+    public String toString() {
+        return this.accountNumber + " " + this.balance + " " + this.name;
     }
 }
 
