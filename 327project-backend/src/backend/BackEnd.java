@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class BackEnd {
 
-    static ArrayList<Account> accounts = new ArrayList<>();
+    static ArrayList<Account> accountList = new ArrayList<>();
 
     public static void readMergedTSF(String mergedTSF) {
         try {
@@ -35,13 +35,19 @@ public class BackEnd {
                         name += element[i];
                     }
                 }
-                 accounts.add(new Account(accNumber, balance, name));
+                 accountList.add(new Account(accNumber, balance, name));
             }
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+        
+        if (command == "Deposit"){
+            for(Account accNumber:accountList)
+                if (accNumber == Account.GetAccountNumber())
+        }
+        
     }
 
     public static void writeValidFiles(String newMasterAccountsFilePath, String validAccountsFilePath) {
