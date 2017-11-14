@@ -45,12 +45,15 @@ public class BackEnd {
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
         String line;
-        String name = "";
+        String name;
 
         while ((line = bufferedReader.readLine()) != null) {
             String[] element = line.split(" ");
-            for (int i = 2; i < element.length; i++) {
-                name.append(element[i]);
+            name = element[2];
+            if (element.length >= 3) {
+                for (int i = 3; i < element.length; i++) {
+                    name += element[i];
+                }
             }
             String accNumber = element[0];
             accountsMap.put(accNumber, new Account(element[1], name));
