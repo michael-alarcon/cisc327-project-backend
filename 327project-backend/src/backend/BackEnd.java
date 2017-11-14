@@ -37,11 +37,12 @@ public class BackEnd {
                 }
                  accountList.add(new Account(accNumber, balance, name));
             }
-            
-            if (command == "Dep"){
+            int iAccNumber = toInt(accNumber);
+            long lBalance = toLong(balance);
+            if (command.equals("Dep")){
             for(Account toAcct:accountList)
-                if (accNumber == toAcct.getAccountNumber())
-                    toAcct.deposit(balance);
+                if (iAccNumber == toAcct.getAccountNumber())
+                    toAcct.deposit(lBalance);
         }
         
             
