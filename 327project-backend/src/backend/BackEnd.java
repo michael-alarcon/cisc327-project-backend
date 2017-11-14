@@ -17,6 +17,44 @@ public class BackEnd {
     static ArrayList<Account> accountsList = new ArrayList<>();
 
     public static void readMergedTSF(String mergedTSF) {
+        try {
+            // Reading Account Master File
+            FileReader fileReader = new FileReader(mergedTSF);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line, command = "", name; 
+            long balance = 0;  
+            int accountNumber = 0, accountNumber2 = 0;
+            
+
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] element = line.split(" ");
+                command = element[0];
+                accountNumber = Integer.parseInt(element[1]);
+                balance = Long.parseLong(element[2]);
+                accountNumber2 = Integer.parseInt(element[3]);
+                name = element[4];
+                if (element.length >= 3) {
+                    for (int i = 3; i < element.length; i++) {
+                        name += element[i];
+                    }
+                }
+                accountsList.add(new Account(accountNumber, balance, name));
+            }
+
+            if (command.equals("DEP")) {
+                for (Account toAcct : accountsList) {
+                    if (accountNumber == toAcct.getAccountNumber()) {
+                        toAcct.deposit(balance);
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 
@@ -47,18 +85,20 @@ public class BackEnd {
             FileReader fileReader = new FileReader(oldMasterAccountsFileName);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String[] element;
-            String line, accountName, balance, accountNumber;
+            String line, accountName; 
+            int accountNumber; 
+            long balance;
 
             while ((line = bufferedReader.readLine()) != null) {
                 element = line.split(" ");
-                balance = element[1];
+                accountNumber = Integer.parseInt(element[0]);
+                balance = Long.parseLong(element[1]);
                 accountName = element[2];
                 if (element.length >= 3) {
                     for (int i = 3; i < element.length; i++) {
                         accountName += element[i];
                     }
                 }
-                accountNumber = element[0];
                 accountsList.add(new Account(accountNumber, balance, accountName));
 
             }
@@ -67,6 +107,14 @@ public class BackEnd {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static int toInt(String input) {
+        return Integer.parseInt(input);
+    }
+
+    public static long toLong(String input) {
+        return Long.parseLong(input);
     }
 
     /**

@@ -5,30 +5,28 @@
  */
 package backend;
 
-import java.io.File;
-
 /**
  *
  * @author Neil
  */
 public class Account {
     
-    private int accountNumber;
+    private final int accountNumber;
     private long balance;
-    private String name;
+    private final String name;
 
-    public Account(String accountNumber, String balance, String name) {
-        this.accountNumber = Integer.parseInt(accountNumber);
-        this.balance = Long.parseLong(balance);
+    public Account(int accountNumber, long balance, String name) {
+        this.accountNumber = accountNumber;
+        this.balance = balance;
         this.name = name;
     }
     
-    public void deposit(String amount){
-        this.balance += Long.parseLong(amount);
+    public void deposit(long amount){
+        this.balance += amount;
     }
     
-    public void withdraw(String amount){
-        this.balance -= Long.parseLong(amount);
+    public void withdraw(long amount){
+        this.balance -= amount;
     }
     
     protected int getAccountNumber() {
