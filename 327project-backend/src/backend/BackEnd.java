@@ -14,10 +14,44 @@ import java.util.*;
  */
 public class BackEnd {
 
-    static ArrayList<Account> accounts = new ArrayList<>();
+    static ArrayList<Account> accountList = new ArrayList<>();
 
     public static void readMergedTSF(String mergedTSF) {
-      
+        try {
+            // Reading Account Master File
+            FileReader fileReader = new FileReader(mergedTSF);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line, name, balance, command, accNumber;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] element = line.split(" ");
+                command = element[0];
+                balance = element[2];
+                name = element[4];
+                accNumber = element[1];
+                if (element.length >= 3) {
+                    for (int i = 3; i < element.length; i++) {
+                        name += element[i];
+                    }
+                }
+                 accountList.add(new Account(accNumber, balance, name));
+            }
+            
+            if (command == "Dep"){
+            for(Account toAcct:accountList)
+                if (accNumber == toAcct.getAccountNumber())
+                    toAcct.deposit(balance);
+        }
+        
+            
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());  
+        }
+        
+          
     }
 
     public static void writeValidFiles(String newMasterAccountsFilePath, String validAccountsFilePath) {
@@ -67,6 +101,14 @@ public class BackEnd {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+    
+    public static int toInt(String input){
+        return Integer.parseInt(input);
+    }
+    
+    public static long toLong(String input){
+        return Long.parseLong(input);
     }
 
     /**
