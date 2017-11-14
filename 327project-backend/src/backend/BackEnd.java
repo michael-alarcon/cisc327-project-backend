@@ -37,17 +37,21 @@ public class BackEnd {
                 }
                  accountList.add(new Account(accNumber, balance, name));
             }
+            
+            if (command == "Dep"){
+            for(Account toAcct:accountList)
+                if (accNumber == toAcct.getAccountNumber())
+                    toAcct.deposit(balance);
+        }
+        
+            
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage());  
         }
         
-        if (command == "Deposit"){
-            for(Account accNumber:accountList)
-                if (accNumber == Account.GetAccountNumber())
-        }
-        
+          
     }
 
     public static void writeValidFiles(String newMasterAccountsFilePath, String validAccountsFilePath) {
@@ -97,6 +101,14 @@ public class BackEnd {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+    
+    public static int toInt(String input){
+        return Integer.parseInt(input);
+    }
+    
+    public static long toLong(String input){
+        return Long.parseLong(input);
     }
 
     /**
