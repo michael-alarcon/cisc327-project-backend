@@ -35,23 +35,23 @@ public class BackEnd {
                         name += element[i];
                     }
                 }
-                 accountList.add(new Account(accNumber, balance, name));
+                accountList.add(new Account(toInt(accNumber), toLong(balance), name));
             }
-            
-            if (command == "Dep"){
-            for(Account toAcct:accountList)
-                if (accNumber == toAcct.getAccountNumber())
-                    toAcct.deposit(balance);
-        }
-        
-            
+
+            if (command == "Dep") {
+                for (Account toAcct : accountList) {
+                    if (accNumber == toAcct.getAccountNumber()) {
+                        toAcct.deposit(balance);
+                    }
+                }
+            }
+
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (IOException e) {
-            System.out.println(e.getMessage());  
+            System.out.println(e.getMessage());
         }
-        
-          
+
     }
 
     public static void writeValidFiles(String newMasterAccountsFilePath, String validAccountsFilePath) {
@@ -65,7 +65,7 @@ public class BackEnd {
             FileWriter validAccounts = new FileWriter(newMasterAccountsFile);
             BufferedWriter writeValid = new BufferedWriter(validAccounts);
 
-            for (Account account : accounts) {
+            for (Account account : accountList) {
                 writeMaster.write(account.toString());
                 writeValid.write(account.getAccountNumber());
             }
@@ -93,7 +93,7 @@ public class BackEnd {
                     }
                 }
                 String accNumber = element[0];
-                accounts.add(new Account(accNumber, balance, name));
+                accountList.add(new Account(toInt(accNumber), toLong(balance), name));
 
             }
         } catch (FileNotFoundException e) {
@@ -102,12 +102,12 @@ public class BackEnd {
             System.out.println(e.getMessage());
         }
     }
-    
-    public static int toInt(String input){
+
+    public static int toInt(String input) {
         return Integer.parseInt(input);
     }
-    
-    public static long toLong(String input){
+
+    public static long toLong(String input) {
         return Long.parseLong(input);
     }
 
