@@ -18,11 +18,17 @@ public class Account {
     private String name;
 
     public Account(String accountNumber, String balance, String name) {
-        //convert parameters to correct type
-        //this.accountNumber = accountNumber;
-        //this.balance = balance;
+        this.accountNumber = Integer.parseInt(accountNumber);
+        this.balance = Long.parseLong(balance);
         this.name = name;
-        
+    }
+    
+    public void deposit(String amount){
+        this.balance += Long.parseLong(amount);
+    }
+    
+    public void withdraw(String amount){
+        this.balance -= Long.parseLong(amount);
     }
     
     protected int getAccountNumber() {

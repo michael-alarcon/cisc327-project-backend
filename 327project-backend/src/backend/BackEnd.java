@@ -17,31 +17,31 @@ public class BackEnd {
     static ArrayList<Account> accountsList = new ArrayList<>();
 
     public static void readMergedTSF(String mergedTSF) {
-        
+
     }
 
-    public static void writeValidFiles(String newMasterAccountsFilePath, String validAccountsFilePath) {
+    public static void writeValidFiles(String newMasterAccountsFileName, String validAccountsFileName) {
         try {
-            File newMasterAccountsFile = new File(newMasterAccountsFilePath);
-            File newValidAccFile = new File(validAccountsFilePath);
+            File newMasterAccountsFile = new File(newMasterAccountsFileName);
+            File newValidAccountsFile = new File(validAccountsFileName);
 
-            FileWriter masterAccounts = new FileWriter(newMasterAccountsFile);
-            BufferedWriter writeMaster = new BufferedWriter(masterAccounts);
+            FileWriter fwMasterAccounts = new FileWriter(newMasterAccountsFile);
+            BufferedWriter writeToMasterAccounts = new BufferedWriter(fwMasterAccounts);
 
             FileWriter validAccounts = new FileWriter(newMasterAccountsFile);
-            BufferedWriter writeValid = new BufferedWriter(validAccounts);
+            BufferedWriter writeToValidAccounts = new BufferedWriter(validAccounts);
 
             for (Account account : accountsList) {
-                writeMaster.write(account.toString());
-                writeValid.write(account.getAccountNumber());
+                writeToMasterAccounts.write(account.toString());
+                writeToValidAccounts.write(account.getAccountNumber());
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void readOldMasterAccountsFile (String oldMasterAccountsFileName) {
-        
+    public static void readOldMasterAccountsFile(String oldMasterAccountsFileName) {
+
         try {
             // Reading Account Master File
             FileReader fileReader = new FileReader(oldMasterAccountsFileName);
@@ -70,10 +70,8 @@ public class BackEnd {
     }
 
     /**
-     * @param args  1 - old master accountsList file
-              2 - merged transaction summary file
-              3 - new master accountsList file
-              4 - valid accountsList file
+     * @param args 0 - old master accountsList file 1 - merged transaction
+     * summary file 2 - new master accountsList file 3 - valid accountsList file
      */
     public static void main(String[] args) {
         if (args.length == 4) {
