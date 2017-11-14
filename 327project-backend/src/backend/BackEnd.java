@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class BackEnd {
 
-    static ArrayList<Account> accounts = new ArrayList<>();
+    static ArrayList<Account> accountsList = new ArrayList<>();
 
     public static void readMergedTSF(String mergedTSF) {
         
@@ -31,7 +31,7 @@ public class BackEnd {
             FileWriter validAccounts = new FileWriter(newMasterAccountsFile);
             BufferedWriter writeValid = new BufferedWriter(validAccounts);
 
-            for (Account account : accounts) {
+            for (Account account : accountsList) {
                 writeMaster.write(account.toString());
                 writeValid.write(account.getAccountNumber());
             }
@@ -40,26 +40,26 @@ public class BackEnd {
         }
     }
 
-    public static void readOldMasterAccountsFile (String oldMasterAccountsFile) {
+    public static void readOldMasterAccountsFile (String oldMasterAccountsFileName) {
         
         try {
             // Reading Account Master File
-            FileReader fileReader = new FileReader(oldMasterAccountsFile);
+            FileReader fileReader = new FileReader(oldMasterAccountsFileName);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            String line, name, balance;
+            String line, accountName, balance, accountNumber;
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] element = line.split(" ");
                 balance = element[1];
-                name = element[2];
+                accountName = element[2];
                 if (element.length >= 3) {
                     for (int i = 3; i < element.length; i++) {
-                        name += element[i];
+                        accountName += element[i];
                     }
                 }
-                String accNumber = element[0];
-                accounts.add(new Account(accNumber, balance, name));
+                accountNumber = element[0];
+                accountsList.add(new Account(accountNumber, balance, accountName));
 
             }
         } catch (FileNotFoundException e) {
@@ -70,10 +70,10 @@ public class BackEnd {
     }
 
     /**
-     * @param args  1 - old master accounts file
-     *              2 - merged transaction summary file
-     *              3 - new master accounts file
-     *              4 - valid accounts file
+     * @param args  1 - old master accountsList file
+              2 - merged transaction summary file
+              3 - new master accountsList file
+              4 - valid accountsList file
      */
     public static void main(String[] args) {
         if (args.length == 4) {
