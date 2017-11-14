@@ -46,11 +46,11 @@ public class BackEnd {
             // Reading Account Master File
             FileReader fileReader = new FileReader(oldMasterAccountsFileName);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-
+            String[] element;
             String line, accountName, balance, accountNumber;
 
             while ((line = bufferedReader.readLine()) != null) {
-                String[] element = line.split(" ");
+                element = line.split(" ");
                 balance = element[1];
                 accountName = element[2];
                 if (element.length >= 3) {
