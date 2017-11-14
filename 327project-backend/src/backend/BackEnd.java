@@ -14,8 +14,11 @@ import java.util.*;
  */
 public class BackEnd {
 
-    static HashMap<String, Account> accountsMap = new HashMap<>();
     static ArrayList<Account> accounts = new ArrayList<>();
+    
+    public static void readMergedTSF(String mergedTSF) {
+        
+    }
 
     public static void writeToFile(String newMasterAccountsFilePath, String validAccountsFilePath) {
         try {
@@ -29,6 +32,7 @@ public class BackEnd {
             BufferedWriter writeValid = new BufferedWriter(validAccounts);
 
             for (Account account : accounts) {
+                Account accountToWrite = accountsMap.get(account);
                 writeMaster.write(account.toString());
                 writeValid.write(account.getAccountNumber());
             }
@@ -57,7 +61,6 @@ public class BackEnd {
             accounts.add(accountsMap.get(accNumber));
 
         }
-
     }
 
     /**

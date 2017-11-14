@@ -13,15 +13,15 @@ import java.io.File;
  */
 public class Account {
     
-    private String balance;
+    private long balance;
     private String name;
 
-    public Account(String balance, String name) {
+    public Account(long balance, String name) {
         this.balance = balance;
     }
     
-    protected int getAccountNumber() {
-        return number;
+    protected long getBalance() {
+        return this.balance;
     }
 }
 
