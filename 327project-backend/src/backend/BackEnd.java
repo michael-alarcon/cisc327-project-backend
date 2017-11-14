@@ -32,7 +32,6 @@ public class BackEnd {
             BufferedWriter writeValid = new BufferedWriter(validAccounts);
 
             for (Account account : accounts) {
-                Account accountToWrite = accountsMap.get(account);
                 writeMaster.write(account.toString());
                 writeValid.write(account.getAccountNumber());
             }
