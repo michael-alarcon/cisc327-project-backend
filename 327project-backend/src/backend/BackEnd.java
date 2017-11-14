@@ -17,7 +17,31 @@ public class BackEnd {
     static ArrayList<Account> accounts = new ArrayList<>();
 
     public static void readMergedTSF(String mergedTSF) {
-        
+        try {
+            // Reading Account Master File
+            FileReader fileReader = new FileReader(mergedTSF);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line, name, balance, command, accNumber;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] element = line.split(" ");
+                command = element[0];
+                balance = element[2];
+                name = element[4];
+                accNumber = element[1];
+                if (element.length >= 3) {
+                    for (int i = 3; i < element.length; i++) {
+                        name += element[i];
+                    }
+                }
+                 accounts.add(new Account(accNumber, balance, name));
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public static void writeValidFiles(String newMasterAccountsFilePath, String validAccountsFilePath) {
