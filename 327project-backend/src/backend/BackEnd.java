@@ -15,6 +15,7 @@ import java.util.*;
 public class BackEnd {
 
     static ArrayList<Account> accountsList = new ArrayList<>();
+    static HashMap<Integer, Account> accountsMap = new HashMap<>();
 
     public static void readMergedTSF(String mergedTSF) {
         try {
@@ -22,10 +23,9 @@ public class BackEnd {
             FileReader fileReader = new FileReader(mergedTSF);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            String line, command = "", name; 
-            long balance = 0;  
+            String line, command = "", name;
+            long balance = 0;
             int accountNumber = 0, accountNumber2 = 0;
-            
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] element = line.split(" ");
@@ -34,19 +34,31 @@ public class BackEnd {
                 balance = Long.parseLong(element[2]);
                 accountNumber2 = Integer.parseInt(element[3]);
                 name = element[4];
+
                 if (element.length >= 3) {
                     for (int i = 3; i < element.length; i++) {
                         name += element[i];
                     }
                 }
-                accountsList.add(new Account(accountNumber, balance, name));
-            }
-
-            if (command.equals("DEP")) {
-                for (Account toAcct : accountsList) {
-                    if (accountNumber == toAcct.getAccountNumber()) {
+                
+                if (accountsMap.containsKey(accountNumber) || accountsMap.containsKey(accountNumber2)) {
+                    Account toAcct = accountsMap.get(accountNumber);
+                    Account toAcct2 = accountsMap.get(accountNumber2);
+                    if (command.equals("DEP")) {
                         toAcct.deposit(balance);
                     }
+                    if (command.equals("WDR")) {
+                        toAcct2.withdraw(balance);
+                    }
+                    if (command.equals("DEL")) {
+                        accountsMap.remove(accountNumber);
+                    }
+                    if (command.equals("XFR")) {
+                        toAcct2.deposit(balance);
+                        toAcct.withdraw(balance);
+                    }
+                } else {
+                    accountsMap.put(accountNumber, new Account(accountNumber, balance, name));
                 }
             }
 
@@ -85,8 +97,8 @@ public class BackEnd {
             FileReader fileReader = new FileReader(oldMasterAccountsFileName);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String[] element;
-            String line, accountName; 
-            int accountNumber; 
+            String line, accountName;
+            int accountNumber;
             long balance;
 
             while ((line = bufferedReader.readLine()) != null) {
@@ -99,7 +111,7 @@ public class BackEnd {
                         accountName += element[i];
                     }
                 }
-                accountsList.add(new Account(accountNumber, balance, accountName));
+                accountsMap.put(accountNumber, new Account(accountNumber, balance, accountName));
 
             }
         } catch (FileNotFoundException e) {
