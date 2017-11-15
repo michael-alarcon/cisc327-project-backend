@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class BackEnd {
 
-    static ArrayList<Account> accountList = new ArrayList<>();
+    static ArrayList<Account> accountsList = new ArrayList<>();
 
     public static void readMergedTSF(String mergedTSF) {
         try {
@@ -22,29 +22,49 @@ public class BackEnd {
             FileReader fileReader = new FileReader(mergedTSF);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            String line, name, balance, command, accNumber;
+            String line, command = "", name; 
+            long balance = 0;  
+            int accountNumber = 0, accountNumber2 = 0;
+            
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] element = line.split(" ");
                 command = element[0];
-                balance = element[2];
+                accountNumber = Integer.parseInt(element[1]);
+                balance = Long.parseLong(element[2]);
+                accountNumber2 = Integer.parseInt(element[3]);
                 name = element[4];
-                accNumber = element[1];
                 if (element.length >= 3) {
                     for (int i = 3; i < element.length; i++) {
                         name += element[i];
                     }
                 }
-                accountList.add(new Account(toInt(accNumber), toLong(balance), name));
+                accountsList.add(new Account(accountNumber, balance, name));
             }
-            int iAccNumber = toInt(accNumber);
-            long lBalance = toLong(balance);
-            if (command.equals("Dep")){
-            for(Account toAcct:accountList)
-                if (iAccNumber == toAcct.getAccountNumber())
-                    toAcct.deposit(lBalance);
-        } else if (command.equals("WDR")){
             
+            if (command.equals("DEP")){
+            for(Account toAcct:accountsList)
+                if (accountNumber == toAcct.getAccountNumber())
+                    toAcct.deposit(balance);
+        } else if (command.equals("WDR")){
+            for(Account toAcct:accountsList)
+                if (accountNumber == toAcct.getAccountNumber())
+                    toAcct.withdraw(balance);        
+        } else if (command.equals("NEW")){
+            Account NAcct = new Account(accountNumber,0,name);
+            //add to list
+        } else if (command.equals("DEL")){
+            for(Account toAcct:accountsList)
+                if (accountNumber == toAcct.getAccountNumber())
+                    toAcct.delete();
+                    //toAcct.remove?
+        } else if (command.equals("XFR")){
+            for(Account toAcct:accountsList)
+                if (accountNumber == toAcct.getAccountNumber())
+                    toAcct.deposit(balance);
+            for(Account toAcct:accountsList)
+                if (accountNumber2 == toAcct.getAccountNumber())
+                    toAcct.withdraw(balance);
         }
         
             
@@ -57,46 +77,48 @@ public class BackEnd {
 
     }
 
-    public static void writeValidFiles(String newMasterAccountsFilePath, String validAccountsFilePath) {
+    public static void writeValidFiles(String newMasterAccountsFileName, String validAccountsFileName) {
         try {
-            File newMasterAccountsFile = new File(newMasterAccountsFilePath);
-            File newValidAccFile = new File(validAccountsFilePath);
+            File newMasterAccountsFile = new File(newMasterAccountsFileName);
+            File newValidAccountsFile = new File(validAccountsFileName);
 
-            FileWriter masterAccounts = new FileWriter(newMasterAccountsFile);
-            BufferedWriter writeMaster = new BufferedWriter(masterAccounts);
+            FileWriter fwMasterAccounts = new FileWriter(newMasterAccountsFile);
+            BufferedWriter writeToMasterAccounts = new BufferedWriter(fwMasterAccounts);
 
             FileWriter validAccounts = new FileWriter(newMasterAccountsFile);
-            BufferedWriter writeValid = new BufferedWriter(validAccounts);
+            BufferedWriter writeToValidAccounts = new BufferedWriter(validAccounts);
 
-            for (Account account : accountList) {
-                writeMaster.write(account.toString());
-                writeValid.write(account.getAccountNumber());
+            for (Account account : accountsList) {
+                writeToMasterAccounts.write(account.toString());
+                writeToValidAccounts.write(account.getAccountNumber());
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void readOldMasterAccountsFile(String oldMasterAccountsFile) {
+    public static void readOldMasterAccountsFile(String oldMasterAccountsFileName) {
 
         try {
             // Reading Account Master File
-            FileReader fileReader = new FileReader(oldMasterAccountsFile);
+            FileReader fileReader = new FileReader(oldMasterAccountsFileName);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            String line, name, balance;
+            String[] element;
+            String line, accountName; 
+            int accountNumber; 
+            long balance;
 
             while ((line = bufferedReader.readLine()) != null) {
-                String[] element = line.split(" ");
-                balance = element[1];
-                name = element[2];
+                element = line.split(" ");
+                accountNumber = Integer.parseInt(element[0]);
+                balance = Long.parseLong(element[1]);
+                accountName = element[2];
                 if (element.length >= 3) {
                     for (int i = 3; i < element.length; i++) {
-                        name += element[i];
+                        accountName += element[i];
                     }
                 }
-                String accNumber = element[0];
-                accountList.add(new Account(toInt(accNumber), toLong(balance), name));
+                accountsList.add(new Account(accountNumber, balance, accountName));
 
             }
         } catch (FileNotFoundException e) {
@@ -115,7 +137,8 @@ public class BackEnd {
     }
 
     /**
-     * @param args 1 - old master accounts file 2 - merged transaction summary file 3 - new master accounts file 4 - valid accounts file
+     * @param args 0 - old master accountsList file 1 - merged transaction
+     * summary file 2 - new master accountsList file 3 - valid accountsList file
      */
     public static void main(String[] args) {
         if (args.length == 4) {

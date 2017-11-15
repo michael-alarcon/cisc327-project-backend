@@ -5,17 +5,15 @@
  */
 package backend;
 
-import java.io.File;
-
 /**
  *
  * @author Neil
  */
 public class Account {
     
-    private int accountNumber;
+    private final int accountNumber;
     private long balance;
-    private String name;
+    private final String name;
 
     public Account(int accountNumber, long balance, String name) {
         this.accountNumber = accountNumber;
