@@ -132,6 +132,7 @@ public class BackEnd {
             ArrayList<Integer> sortedAccountsList = new ArrayList<>(accountsMap.size());
             sortedAccountsList.addAll(accountsMap.keySet());
             Account account;
+            
             for (int accountNumberKey : sortedAccountsList) {
                 account = accountsMap.get(accountNumberKey);
                 writeToMasterAccounts.write(account.toString());
