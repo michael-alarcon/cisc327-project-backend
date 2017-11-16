@@ -2,6 +2,9 @@ package backend;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * This code is responsible for handling the backend of the QBasic project. It
@@ -29,7 +32,15 @@ public class BackEnd {
             // Reading Account Master File
             FileReader fileReader = new FileReader(mergedTSF);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-
+            
+            Logger errorLog = Logger.getLogger("Error");
+            FileHandler errorFile;
+            
+            errorFile = new FileHandler(System.getProperty("user.dir") + "\\errorLogFile.log");
+            errorLog.addHandler(errorFile);
+            SimpleFormatter formatter = new SimpleFormatter();
+            errorFile.setFormatter(formatter);
+            
             String line, command = "", name = "";
             long balance = 0;
             int accountNumber = 0, accountNumber2 = 0;
@@ -51,7 +62,7 @@ public class BackEnd {
             }
             if (command.equals("NEW")) {
                 if (accountsMap.containsKey(accountNumber)) {
-                    System.out.println("Account number " + accountNumber + " already exists");
+                    errorLog.warning("Account is already made");
                 } else {
                     accountsMap.put(accountNumber, new Account(accountNumber, balance, name));
                 }
@@ -62,12 +73,23 @@ public class BackEnd {
                     toAcct.deposit(balance);
                 }
                 if (command.equals("WDR")) {
-                    toAcct2.withdraw(balance);
+                    if ((toAcct2.getBalance()-balance) <0){
+                        errorLog.warning("Insufficient Funds");
+                    } else {
+                        toAcct2.withdraw(balance);
+                    }
                 }
                 if (command.equals("DEL")) {
-                    accountsMap.remove(accountNumber);
+                    if(!accountsMap.containsKey(accountNumber)){
+                        errorLog.warning("No such account exists");
+                    } else {
+                        accountsMap.remove(accountNumber);
+                    }
                 }
                 if (command.equals("XFR")) {
+                    if((toAcct2.getBalance()-balance)<0){
+                        errorLog.warning("Insufficient Funds");
+                    }
                     toAcct.deposit(balance);
                     toAcct2.withdraw(balance);
                 }
