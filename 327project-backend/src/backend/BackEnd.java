@@ -30,6 +30,7 @@ public class BackEnd {
      */
     public static void readMergedTSF(String mergedTSF) {
         try {
+            
             // Reading Account Master File
             FileReader fileReader = new FileReader(mergedTSF);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -37,7 +38,6 @@ public class BackEnd {
             // Create logger
             Logger errorLog = Logger.getLogger("Error");
             FileHandler errorFile;
-
             errorFile = new FileHandler(System.getProperty("user.dir") + "\\errorLogFile.log");
             errorLog.addHandler(errorFile);
             SimpleFormatter formatter = new SimpleFormatter();
@@ -49,6 +49,7 @@ public class BackEnd {
 
             // reads merged transaction summary file line by line
             while ((line = bufferedReader.readLine()) != null) {
+                
                 String[] element = line.split(" ");
                 command = element[0];
                 accountNumber = Integer.parseInt(element[1]);
@@ -70,8 +71,10 @@ public class BackEnd {
                         accountsMap.put(accountNumber, new Account(accountNumber, money, name));
                     }
                 } else if (accountsMap.containsKey(accountNumber) || accountsMap.containsKey(accountNumber2)) {
+                    
                     Account toAcct = accountsMap.get(accountNumber);
                     Account toAcct2 = accountsMap.get(accountNumber2);
+                    
                     if (command.equals("DEP")) {
                         toAcct.deposit(money);
                     }
@@ -90,7 +93,6 @@ public class BackEnd {
                         } else {
                             accountsMap.remove(accountNumber);
                         }
-
                     }
                     if (command.equals("XFR")) {
                         if ((toAcct2.getBalance() - money) < 0) {
@@ -197,7 +199,6 @@ public class BackEnd {
         } else {
             System.out.println("ERROR");
         }
-
     }
 
 }
