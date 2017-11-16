@@ -7,7 +7,7 @@ import java.util.*;
  * This code is responsible for handling the backend of the QBasic project. It
  * takes in 4 inputs: the old master accounts file, the merged transaction
  * summary file, the new master accounts file, and the new valid accounts file.
- * Reads through the old master accounts fil eand the merged transaction summary
+ * Reads through the old master accounts file and the merged transaction summary
  * file and creates two new files.
  *
  * @author Rory Hilson 10203174
@@ -16,7 +16,6 @@ import java.util.*;
  */
 public class BackEnd {
 
-    static ArrayList<Account> accountsList = new ArrayList<>();
     static HashMap<Integer, Account> accountsMap = new HashMap<>();
 
     /**
@@ -73,41 +72,6 @@ public class BackEnd {
                     toAcct2.withdraw(balance);
                 }
             }
-//            if (command.equals("DEP")) {
-//                for (Account toAcct : accountsList) {
-//                    if (accountNumber == toAcct.getAccountNumber()) {
-//                        toAcct.deposit(balance);
-//                    }
-//                }
-//            } else if (command.equals("WDR")) {
-//                for (Account toAcct : accountsList) {
-//                    if (accountNumber == toAcct.getAccountNumber()) {
-//                        toAcct.withdraw(balance);
-//                    }
-//                }
-//            } else if (command.equals("NEW")) {
-//                Account NAcct = new Account(accountNumber, 0, name);
-//                //add to list
-//            } else if (command.equals("DEL")) {
-//                for (Account toAcct : accountsList) {
-//                    if (accountNumber == toAcct.getAccountNumber()) {
-//                        toAcct.delete();
-//                    }
-//                }
-//                //toAcct.remove?
-//            } else if (command.equals("XFR")) {
-//                for (Account toAcct : accountsList) {
-//                    if (accountNumber == toAcct.getAccountNumber()) {
-//                        toAcct.deposit(balance);
-//                    }
-//                }
-//                for (Account toAcct : accountsList) {
-//                    if (accountNumber2 == toAcct.getAccountNumber()) {
-//                        toAcct.withdraw(balance);
-//                    }
-//                }
-//            }
-
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (IOException e) {
@@ -123,21 +87,23 @@ public class BackEnd {
      *
      * @param newMasterAccountsFileName File name of the new master accounts
      * file
-     * @param newValidAccountsFileName File name of the new valid accoutns file
+     * @param newValidAccountsFileName File name of the new valid accounts file
      */
     public static void writeValidFiles(String newMasterAccountsFileName, String newValidAccountsFileName) {
         try {
-            String currentFolder = System.getProperty("user.dir") + "\\";
+            String currentFolder = System.getProperty("user.dir") + "\\";   //current folder
 
+            //create file for new master accounts file
             File newMasterAccountsFile = new File(currentFolder + newMasterAccountsFileName);
-            File newValidAccountsFile = new File(currentFolder + newValidAccountsFileName);
-
             FileWriter fwMasterAccounts = new FileWriter(newMasterAccountsFile);
             BufferedWriter writeToMasterAccounts = new BufferedWriter(fwMasterAccounts);
-
+            
+            //create file for new valid accounts file
+            File newValidAccountsFile = new File(currentFolder + newValidAccountsFileName);
             FileWriter validAccounts = new FileWriter(newValidAccountsFile);
             BufferedWriter writeToValidAccounts = new BufferedWriter(validAccounts);
 
+            //go through each account in the map
             Account account;
             for (int accountNumberKey : accountsMap.keySet()) {
                 account = accountsMap.get(accountNumberKey);
@@ -165,6 +131,7 @@ public class BackEnd {
             int accountNumber;
             long balance;
 
+            //reads line by line
             while ((line = bufferedReader.readLine()) != null) {
                 element = line.split(" ");
                 accountNumber = Integer.parseInt(element[0]);
@@ -176,7 +143,6 @@ public class BackEnd {
                     }
                 }
                 accountsMap.put(accountNumber, new Account(accountNumber, balance, accountName));
-
             }
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
