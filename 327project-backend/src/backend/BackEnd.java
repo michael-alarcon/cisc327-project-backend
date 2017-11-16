@@ -128,9 +128,11 @@ public class BackEnd {
             FileWriter validAccounts = new FileWriter(newValidAccountsFile);
             BufferedWriter writeToValidAccounts = new BufferedWriter(validAccounts);
 
-            //go through each account in the map
+            // sorts accounts by number and writes to files
+            ArrayList<Integer> sortedAccountsList = new ArrayList<>(accountsMap.size());
+            sortedAccountsList.addAll(accountsMap.keySet());
             Account account;
-            for (int accountNumberKey : accountsMap.keySet()) {
+            for (int accountNumberKey : sortedAccountsList) {
                 account = accountsMap.get(accountNumberKey);
                 writeToMasterAccounts.write(account.toString());
                 writeToValidAccounts.write(account.getAccountNumber());
