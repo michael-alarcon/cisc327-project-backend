@@ -11,7 +11,7 @@ import java.util.logging.SimpleFormatter;
  * takes in 4 inputs: the old master accounts file, the merged transaction
  * summary file, the new master accounts file, and the new valid accounts file.
  * Reads through the old master accounts file and the merged transaction summary
- * file and creates two new files.
+ * file and creates two new files. Assumes input files are well formed.
  *
  * @author Rory Hilson 10203174
  * @author Neil Huan 10189880
@@ -32,66 +32,69 @@ public class BackEnd {
             // Reading Account Master File
             FileReader fileReader = new FileReader(mergedTSF);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            
+
+            // Create logger
             Logger errorLog = Logger.getLogger("Error");
             FileHandler errorFile;
-            
+
             errorFile = new FileHandler(System.getProperty("user.dir") + "\\errorLogFile.log");
             errorLog.addHandler(errorFile);
             SimpleFormatter formatter = new SimpleFormatter();
             errorFile.setFormatter(formatter);
-            
+
             String line, command = "", name = "";
-            long balance = 0;
+            long money = 0;
             int accountNumber = 0, accountNumber2 = 0;
 
+            // reads merged transaction summary file line by line
             while ((line = bufferedReader.readLine()) != null) {
                 String[] element = line.split(" ");
                 command = element[0];
                 accountNumber = Integer.parseInt(element[1]);
-                balance = Long.parseLong(element[2]);
+                money = Long.parseLong(element[2]);
                 accountNumber2 = Integer.parseInt(element[3]);
                 name = element[4];
 
+                // getting the full name
                 if (element.length >= 3) {
                     for (int i = 3; i < element.length; i++) {
                         name += element[i];
                     }
                 }
-                accountsMap.put(accountNumber, new Account(accountNumber, balance, name));
-            }
-            if (command.equals("NEW")) {
-                if (accountsMap.containsKey(accountNumber)) {
-                    errorLog.warning("Account is already made");
-                } else {
-                    accountsMap.put(accountNumber, new Account(accountNumber, balance, name));
-                }
-            } else if (accountsMap.containsKey(accountNumber) || accountsMap.containsKey(accountNumber2)) {
-                Account toAcct = accountsMap.get(accountNumber);
-                Account toAcct2 = accountsMap.get(accountNumber2);
-                if (command.equals("DEP")) {
-                    toAcct.deposit(balance);
-                }
-                if (command.equals("WDR")) {
-                    if ((toAcct2.getBalance()-balance) <0){
-                        errorLog.warning("Insufficient Funds");
+
+                if (command.equals("NEW")) {
+                    if (accountsMap.containsKey(accountNumber)) {
+                        errorLog.warning("Account " + accountNumber + " already exists");
                     } else {
-                        toAcct2.withdraw(balance);
+                        accountsMap.put(accountNumber, new Account(accountNumber, money, name));
                     }
-                }
-                if (command.equals("DEL")) {
-                    if(!accountsMap.containsKey(accountNumber)){
-                        errorLog.warning("No such account exists");
-                    } else {
-                        accountsMap.remove(accountNumber);
+                } else if (accountsMap.containsKey(accountNumber) || accountsMap.containsKey(accountNumber2)) {
+                    Account toAcct = accountsMap.get(accountNumber);
+                    Account toAcct2 = accountsMap.get(accountNumber2);
+                    if (command.equals("DEP")) {
+                        toAcct.deposit(money);
                     }
-                }
-                if (command.equals("XFR")) {
-                    if((toAcct2.getBalance()-balance)<0){
-                        errorLog.warning("Insufficient Funds");
+                    if (command.equals("WDR")) {
+                        if ((toAcct2.getBalance() - money) < 0) {
+                            errorLog.warning("Insufficient Funds");
+                        } else {
+                            toAcct2.withdraw(money);
+                        }
                     }
-                    toAcct.deposit(balance);
-                    toAcct2.withdraw(balance);
+                    if (command.equals("DEL")) {
+                        if (!accountsMap.containsKey(accountNumber)) {
+                            errorLog.warning("Account " + accountNumber + " does not exist");
+                        } else {
+                            accountsMap.remove(accountNumber);
+                        }
+                    }
+                    if (command.equals("XFR")) {
+                        if ((toAcct2.getBalance() - money) < 0) {
+                            errorLog.warning("Insufficient Funds");
+                        }
+                        toAcct.deposit(money);
+                        toAcct2.withdraw(money);
+                    }
                 }
             }
         } catch (FileNotFoundException e) {
@@ -119,7 +122,7 @@ public class BackEnd {
             File newMasterAccountsFile = new File(currentFolder + newMasterAccountsFileName);
             FileWriter fwMasterAccounts = new FileWriter(newMasterAccountsFile);
             BufferedWriter writeToMasterAccounts = new BufferedWriter(fwMasterAccounts);
-            
+
             //create file for new valid accounts file
             File newValidAccountsFile = new File(currentFolder + newValidAccountsFileName);
             FileWriter validAccounts = new FileWriter(newValidAccountsFile);
