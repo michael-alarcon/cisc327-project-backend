@@ -7,9 +7,9 @@ import java.util.*;
  * This code is responsible for handling the backend of the QBasic project. It
  * takes in 4 inputs: the old master accounts file, the merged transaction
  * summary file, the new master accounts file, and the new valid accounts file.
- * Reads through the old master accounts fil eand the merged transaction
- * summary file and creates two new files.
- * 
+ * Reads through the old master accounts fil eand the merged transaction summary
+ * file and creates two new files.
+ *
  * @author Rory Hilson 10203174
  * @author Neil Huan 10189880
  * @author Michael Alarcon 10172841
@@ -22,7 +22,7 @@ public class BackEnd {
     /**
      * Reads the merged transaction summary file. Depending on the commands
      * found in the file accounts will either be updated, created or deleted.
-     * 
+     *
      * @param mergedTSF File name of the merged transaction summary files.
      */
     public static void readMergedTSF(String mergedTSF) {
@@ -50,7 +50,13 @@ public class BackEnd {
                 }
                 accountsMap.put(accountNumber, new Account(accountNumber, balance, name));
             }
-            if (accountsMap.containsKey(accountNumber) || accountsMap.containsKey(accountNumber2)) {
+            if (command.equals("NEW")) {
+                if (accountsMap.containsKey(accountNumber)) {
+                    System.out.println("Account number " + accountNumber + " already exists");
+                } else {
+                    accountsMap.put(accountNumber, new Account(accountNumber, balance, name));
+                }
+            } else if (accountsMap.containsKey(accountNumber) || accountsMap.containsKey(accountNumber2)) {
                 Account toAcct = accountsMap.get(accountNumber);
                 Account toAcct2 = accountsMap.get(accountNumber2);
                 if (command.equals("DEP")) {
@@ -65,12 +71,6 @@ public class BackEnd {
                 if (command.equals("XFR")) {
                     toAcct.deposit(balance);
                     toAcct2.withdraw(balance);
-                }
-            } else if (command.equals("NEW")) {
-                if (accountsMap.containsKey(accountNumber)) {
-                    System.out.println("Account number " + accountNumber + " already exists");
-                } else {
-                    accountsMap.put(accountNumber, new Account(accountNumber, balance, name));
                 }
             }
 //            if (command.equals("DEP")) {
@@ -128,14 +128,14 @@ public class BackEnd {
     public static void writeValidFiles(String newMasterAccountsFileName, String newValidAccountsFileName) {
         try {
             String currentFolder = System.getProperty("user.dir") + "\\";
-            
-            File newMasterAccountsFile = new File(currentFolder + newMasterAccountsFileName);
-            File newValidAccountsFile = new File(newValidAccountsFileName);
 
-            FileWriter fwMasterAccounts = new FileWriter(currentFolder + newMasterAccountsFile);
+            File newMasterAccountsFile = new File(currentFolder + newMasterAccountsFileName);
+            File newValidAccountsFile = new File(currentFolder + newValidAccountsFileName);
+
+            FileWriter fwMasterAccounts = new FileWriter(newMasterAccountsFile);
             BufferedWriter writeToMasterAccounts = new BufferedWriter(fwMasterAccounts);
 
-            FileWriter validAccounts = new FileWriter(newMasterAccountsFile);
+            FileWriter validAccounts = new FileWriter(newValidAccountsFile);
             BufferedWriter writeToValidAccounts = new BufferedWriter(validAccounts);
 
             Account account;
@@ -187,7 +187,7 @@ public class BackEnd {
 
     /**
      * Main function.
-     * 
+     *
      * @param args 0 - old master accountsList file 1 - merged transaction
      * summary file 2 - new master accountsList file 3 - valid accountsList file
      */
