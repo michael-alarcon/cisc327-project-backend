@@ -8,7 +8,11 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 /**
- * This code is responsible for handling the backend of the QBasic project. It takes in 4 inputs: the old master accounts file, the merged transaction summary file, the new master accounts file, and the new valid accounts file. Reads through the old master accounts file and the merged transaction summary file and creates two new files. Assumes input files are well formed.
+ * This code is responsible for handling the backend of the QBasic project. It
+ * takes in 4 inputs: the old master accounts file, the merged transaction
+ * summary file, the new master accounts file, and the new valid accounts file.
+ * Reads through the old master accounts file and the merged transaction summary
+ * file and creates two new files. Assumes input files are well formed.
  *
  * @author Rory Hilson 10203174
  * @author Neil Huan 10189880
@@ -19,7 +23,8 @@ public class BackEnd {
     static HashMap<Integer, Account> accountsMap = new HashMap<>();
 
     /**
-     * Reads the merged transaction summary file. Depending on the commands found in the file accounts will either be updated, created or deleted.
+     * Reads the merged transaction summary file. Depending on the commands
+     * found in the file accounts will either be updated, created or deleted.
      *
      * @param mergedTSF File name of the merged transaction summary files.
      */
@@ -80,12 +85,12 @@ public class BackEnd {
                     if (command.equals("DEL")) {
                         if (!accountsMap.containsKey(accountNumber)) {
                             errorLog.log(Level.WARNING, "Account {0} does not exist", accountNumber);
+                        } else if (toAcct.getBalance() != 0) {
+                            errorLog.log(Level.WARNING, "Account {0} does not have $0 balance", accountNumber);
                         } else {
-                            if (toAcct.getBalance()!= 0){
-                                errorLog.log(Level.WARNING, "Account {0} does not have $0 balance", accountNumber);
-                            }
                             accountsMap.remove(accountNumber);
                         }
+
                     }
                     if (command.equals("XFR")) {
                         if ((toAcct2.getBalance() - money) < 0) {
@@ -105,9 +110,12 @@ public class BackEnd {
     }
 
     /**
-     * Writes the new master accounts file and new valid accounts file. Loops through the accounts in the map and writes the appropriate information to their respective files.
+     * Writes the new master accounts file and new valid accounts file. Loops
+     * through the accounts in the map and writes the appropriate information to
+     * their respective files.
      *
-     * @param newMasterAccountsFileName File name of the new master accounts file
+     * @param newMasterAccountsFileName File name of the new master accounts
+     * file
      * @param newValidAccountsFileName File name of the new valid accounts file
      */
     public static void writeValidFiles(String newMasterAccountsFileName, String newValidAccountsFileName) {
@@ -128,7 +136,7 @@ public class BackEnd {
             ArrayList<Integer> sortedAccountsList = new ArrayList<>(accountsMap.size());
             sortedAccountsList.addAll(accountsMap.keySet());
             Account account;
-            
+
             for (int accountNumberKey : sortedAccountsList) {
                 account = accountsMap.get(accountNumberKey);
                 writeToMasterAccounts.write(account.toString());
@@ -178,7 +186,8 @@ public class BackEnd {
     /**
      * Main function.
      *
-     * @param args 0 - old master accountsList file 1 - merged transaction summary file 2 - new master accountsList file 3 - valid accountsList file
+     * @param args 0 - old master accountsList file 1 - merged transaction
+     * summary file 2 - new master accountsList file 3 - valid accountsList file
      */
     public static void main(String[] args) {
         if (args.length == 4) {
