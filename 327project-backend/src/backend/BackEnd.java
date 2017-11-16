@@ -2,6 +2,8 @@ package backend;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 /**
  * This code is responsible for handling the backend of the QBasic project. It
@@ -30,7 +32,13 @@ public class BackEnd {
             // Reading Account Master File
             FileReader fileReader = new FileReader(mergedTSF);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-
+            
+            Logger errorLog = Logger.getLogger("Error");
+            FileHandler errorFile;
+            
+            errorFile = new FileHandler(System.getProperty("user.dir") + "\\errorLogFile.log");
+            errorLog.addHandler(errorFile);
+            
             String line, command = "", name = "";
             long balance = 0;
             int accountNumber = 0, accountNumber2 = 0;
@@ -66,6 +74,9 @@ public class BackEnd {
                     toAcct2.withdraw(balance);
                 }
                 if (command.equals("DEL")) {
+                    if(!accountsMap.containsKey(accountNumber)){
+                        
+                    }
                     accountsMap.remove(accountNumber);
                 }
                 if (command.equals("XFR")) {
