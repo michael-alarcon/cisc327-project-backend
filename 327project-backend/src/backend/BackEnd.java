@@ -84,23 +84,23 @@ public class BackEnd {
                     }
                     if (command.equals("WDR")) {
                         if ((toAcct2.getBalance() - money) < 0) {
-                            errorLog.warning("Insufficient Funds");
+                            errorLog.log(Level.WARNING, "Insufficient Funds: Account number " + accountNumber2);
                         } else {
                             toAcct2.withdraw(money);
                         }
                     }
                     if (command.equals("DEL")) {
                         if (!accountsMap.containsKey(accountNumber)) {
-                            errorLog.log(Level.WARNING, "Account {0} does not exist", accountNumber);
+                            errorLog.log(Level.WARNING, "Account " + accountNumber + " does not exist");
                         } else if (toAcct.getBalance() != 0) {
-                            errorLog.log(Level.WARNING, "Account {0} does not have $0 balance", accountNumber);
+                            errorLog.log(Level.WARNING, "Account " + accountNumber + " does not have $0 balance");
                         } else {
                             accountsMap.remove(accountNumber);
                         }
                     }
                     if (command.equals("XFR")) {
                         if ((toAcct2.getBalance() - money) < 0) {
-                            errorLog.warning("Insufficient Funds");
+                            errorLog.log(Level.WARNING, "Insufficient Funds: Account number " + accountNumber2);
                         }
                         toAcct.deposit(money);
                         toAcct2.withdraw(money);
