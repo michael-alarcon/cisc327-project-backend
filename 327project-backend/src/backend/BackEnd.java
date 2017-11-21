@@ -50,6 +50,10 @@ public class BackEnd {
             // reads merged transaction summary file line by line
             while ((line = bufferedReader.readLine()) != null) {
                 
+                if (line.equals("EOS")) {
+                    break;
+                }
+                
                 String[] element = line.split(" ");
                 command = element[0];
                 accountNumber = Integer.parseInt(element[1]);
@@ -133,17 +137,32 @@ public class BackEnd {
             File newValidAccountsFile = new File(currentFolder + newValidAccountsFileName);
             FileWriter validAccounts = new FileWriter(newValidAccountsFile);
             BufferedWriter writeToValidAccounts = new BufferedWriter(validAccounts);
+            
+            if (newValidAccountsFile.exists()) {
+                newValidAccountsFile.delete();
+            }
+            if (newMasterAccountsFile.exists()) {
+                newMasterAccountsFile.delete();
+            }
 
             // sorts accounts by number and writes to files
             ArrayList<Integer> sortedAccountsList = new ArrayList<>(accountsMap.size());
             sortedAccountsList.addAll(accountsMap.keySet());
-            Account account;
+            Account anAccount;
 
             for (int accountNumberKey : sortedAccountsList) {
-                account = accountsMap.get(accountNumberKey);
-                writeToMasterAccounts.write(account.toString());
-                writeToValidAccounts.write(account.getAccountNumber());
+                anAccount = accountsMap.get(accountNumberKey);
+                writeToMasterAccounts.write(anAccount.toString());
+                writeToMasterAccounts.newLine();
+                writeToValidAccounts.write(anAccount.getAccountNumber() + "");
+                writeToValidAccounts.newLine();
             }
+            
+            writeToMasterAccounts.flush();
+            writeToMasterAccounts.close();
+            writeToValidAccounts.flush();
+            writeToValidAccounts.close(); 
+            
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
