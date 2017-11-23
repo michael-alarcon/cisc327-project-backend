@@ -30,7 +30,7 @@ public class BackEnd {
      */
     public static void readMergedTSF(String mergedTSF) {
         try {
-            
+
             // Reading Account Master File
             FileReader fileReader = new FileReader(mergedTSF);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -49,11 +49,11 @@ public class BackEnd {
 
             // reads merged transaction summary file line by line
             while ((line = bufferedReader.readLine()) != null) {
-                
+
                 if (line.equals("EOS")) {
                     break;
                 }
-                
+
                 String[] element = line.split(" ");
                 command = element[0];
                 accountNumber = Integer.parseInt(element[1]);
@@ -62,23 +62,23 @@ public class BackEnd {
                 name = element[4];
 
                 // getting the full name
-                if (element.length >= 3) {
-                    for (int i = 3; i < element.length; i++) {
-                        name += element[i];
+                if (element.length > 5) {
+                    for (int i = 5; i < element.length; i++) {
+                        name += " " + element[i];
                     }
                 }
 
                 if (command.equals("NEW")) {
                     if (accountsMap.containsKey(accountNumber)) {
-                        errorLog.log(Level.WARNING, "Account {0} already exists", accountNumber);
+                        errorLog.log(Level.WARNING, "Account " + accountNumber + " already exists");
                     } else {
                         accountsMap.put(accountNumber, new Account(accountNumber, money, name));
                     }
                 } else if (accountsMap.containsKey(accountNumber) || accountsMap.containsKey(accountNumber2)) {
-                    
+
                     Account toAcct = accountsMap.get(accountNumber);
                     Account toAcct2 = accountsMap.get(accountNumber2);
-                    
+
                     if (command.equals("DEP")) {
                         toAcct.deposit(money);
                     }
@@ -137,7 +137,7 @@ public class BackEnd {
             File newValidAccountsFile = new File(currentFolder + newValidAccountsFileName);
             FileWriter validAccounts = new FileWriter(newValidAccountsFile);
             BufferedWriter writeToValidAccounts = new BufferedWriter(validAccounts);
-            
+
             if (newValidAccountsFile.exists()) {
                 newValidAccountsFile.delete();
             }
@@ -148,21 +148,23 @@ public class BackEnd {
             // sorts accounts by number and writes to files
             ArrayList<Integer> sortedAccountsList = new ArrayList<>(accountsMap.size());
             sortedAccountsList.addAll(accountsMap.keySet());
+            Collections.sort(sortedAccountsList);
+
             Account anAccount;
 
             for (int accountNumberKey : sortedAccountsList) {
                 anAccount = accountsMap.get(accountNumberKey);
                 writeToMasterAccounts.write(anAccount.toString());
                 writeToMasterAccounts.newLine();
-                writeToValidAccounts.write(anAccount.getAccountNumber() + "");
+                writeToValidAccounts.write(String.valueOf(anAccount.getAccountNumber()));
                 writeToValidAccounts.newLine();
             }
-            
+
             writeToMasterAccounts.flush();
             writeToMasterAccounts.close();
             writeToValidAccounts.flush();
-            writeToValidAccounts.close(); 
-            
+            writeToValidAccounts.close();
+
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -190,9 +192,9 @@ public class BackEnd {
                 accountNumber = Integer.parseInt(element[0]);
                 balance = Long.parseLong(element[1]);
                 accountName = element[2];
-                if (element.length >= 3) {
+                if (element.length > 3) {
                     for (int i = 3; i < element.length; i++) {
-                        accountName += element[i];
+                        accountName += " " + element[i];
                     }
                 }
                 accountsMap.put(accountNumber, new Account(accountNumber, balance, accountName));
